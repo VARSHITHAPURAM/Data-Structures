@@ -1,109 +1,78 @@
-#include <stdio.h>  
-#include <stdlib.h>  
-void push();  
-void pop();  
-void display();  
-struct node   
-{  
-int val;  
-struct node *next;  
-};  
-struct node *head;  
-int main ()  
-{  
-    int choice,want_continue;     
-    do {  
-        printf("\n\nChose one from the below options...\n");  
-        printf("\n1.Push\n2.Pop\n3.Show\n4.Exit");  
-        printf("\n Enter your choice \n");        
-        scanf("%d",&choice);  
-        switch(choice)  
-        {  
-            case 1:  
-            {   
-                push();  
-                break;  
-            }  
-            case 2:  
-            {  
-                pop();  
-                break;  
-            }  
-            case 3:  
-            {  
-                display();  
-                break;  
-            }  
-        };
-        printf("Want to continue (enter 1):");
-        scanf("%d",&want_continue);
-    }  while(want_continue==1);
-    return 0;
-}  
-void push ()  
-{  
-    int val;  
-    struct node *ptr = (struct node*)malloc(sizeof(struct node));   
-    if(ptr == NULL)  
-    {  
-        printf("not able to push the element");   
-    }  
-    else   
-    {  
-        printf("Enter the value to be pushed\n");  
-        scanf("%d",&val);  
-        if(head==NULL)  
-        {         
-            ptr->val = val;  
-            ptr -> next = NULL;  
-            head=ptr;  
-        }   
-        else   
-        {  
-            ptr->val = val;  
-            ptr->next = head;  
-            head=ptr;  
-               
-        }  
-        printf("Item pushed\n");  
-          
-    }  
-}  
-  
-void pop()  
-{  
-    int item;  
-    struct node *ptr;  
-    if (head == NULL)  
-    {  
-        printf("Underflow\n");  
-    }  
-    else  
-    {  
-        item = head->val;  
-        ptr = head;  
-        head = head->next;  
-        free(ptr);  
-        printf("Item popped\n");  
-          
-    }  
-}  
-void display()  
-{  
-    int i;  
-    struct node *ptr;  
-    ptr=head;  
-    if(ptr == NULL)  
-    {  
-        printf("Stack is empty\n");  
-    }  
-    else  
-    {  
-        printf("Stack elements \n");  
-        while(ptr!=NULL)  
-        {  
-            printf("%d\n",ptr->val);  
-            ptr = ptr->next;  
-        }  
-    }  
-}  
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node{
+	int data;
+	struct Node *next;
+};
+
+
+void Push(struct Node**,int);
+int Pop(struct Node**);
+void Traversal(struct Node *);
+
+int main(){
+	int want_continue, choice, data;
+	struct Node *top = NULL;
+	printf("Enter 1.push ; 2.pop ; 3.Traversal\n");
+	do{
+		printf("Enter your choice: ");
+		scanf("%d",&choice);
+		switch(choice){
+			case 1 : printf("Enter the value: ");
+				  scanf("%d",&data);
+				  Push(&top,data);
+				  break;
+
+			case 2 : data = Pop(&top);
+				printf("Poped item: %d ", data);
+				  break;
+
+			case 3 : Traversal(top);
+				  break;
+		}
+		printf("If you want to contine Enter 1 : ");
+		scanf("%d",&want_continue);
+	}while(want_continue == 1);
+	return 0;
+}
+
+
+
+void Push(struct Node **top,int data){
+	struct Node *temp;
+
+	temp = (struct Node*)malloc(sizeof(struct Node));
+	temp -> data = data;
+
+	temp -> next = *top;
+	(*top) = temp;
+
+}
+
+int Pop(struct Node **top){
+	struct Node *temp;
+	int data;
+	temp = *top;
+	if(*top == NULL){
+		printf("UNderflown\n");
+		exit(0);
+	}
+	else{
+		temp = *top;
+		data = temp->data;
+		(*top) = (*top) -> next;
+		temp -> next = NULL;
+		free(temp);
+		return data;
+	}
+}
+
+void Traversal(struct Node *top){
+	struct Node *temp;
+	temp = top;
+	while(temp != NULL){
+		printf("%d\t",temp -> data);
+		temp = temp -> next;
+	}
+}
